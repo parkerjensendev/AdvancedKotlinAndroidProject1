@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">AdvancedAndroidKotlinPart1</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="glid_description">Glide - Image Loading Library by BumpTech</string>
+    <string name="current_repo_description">LoadApp - Current Repository by Udacity</string>
+    <string name="retrofit_description">Retrofit - Type-safe HTTP Client for Android and Java by Square, Inc</string>
+    <string name="download">Download</string>
+    <string name="downloading">Downloading</string>
+    <string name="download_channel_id">download</string>
+    <string name="download_channel">download_channel</string>
+    <string name="file_name">File Name:</string>
+    <string name="status">Status:</string>
+    <string name="ok">Ok</string>
+</resources>
