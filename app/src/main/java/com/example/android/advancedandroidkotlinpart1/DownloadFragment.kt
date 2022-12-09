@@ -1,8 +1,6 @@
 package com.example.android.advancedandroidkotlinpart1
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
+import android.animation.*
 import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -27,7 +25,7 @@ import com.example.android.advancedandroidkotlinpart1.databinding.FragmentDownlo
 
 class DownloadFragment : Fragment() {
     lateinit var binding: FragmentDownloadBinding
-    lateinit var buttonAnimator: Animator
+    lateinit var animators: AnimatorSet
     lateinit var downloadManager: DownloadManager
     lateinit var downloadRequest: DownloadManager.Request
     var downloadId = -1L
@@ -78,7 +76,7 @@ class DownloadFragment : Fragment() {
             }
         }
 
-        setUpButtonAnimator()
+        setUpAnimators()
         downloadManager = requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         requireActivity().registerReceiver(new, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
@@ -87,20 +85,33 @@ class DownloadFragment : Fragment() {
         return binding.root
     }
 
-    fun setUpButtonAnimator() {
-        buttonAnimator = ObjectAnimator.ofArgb(binding.btnDownload,
+    fun setUpAnimators() {
+        val buttonAnimator = ObjectAnimator.ofArgb(binding.btnDownload,
             "backgroundColor", Color.GREEN, Color.DKGRAY)
         buttonAnimator.let {
-            buttonAnimator.duration = 1000
+            it.duration = 1000
             disableDownloadButtonDuringDownload(binding.btnDownload, buttonAnimator)
         }
+
+        val circleAnimator = ValueAnimator.ofFloat(0F, 1F)
+            .apply {
+                duration = 1000
+                addUpdateListener { animator ->
+                    binding.btnDownload.arcProportion = animator.animatedValue as Float
+                    binding.btnDownload.invalidate()
+                }
+            }
+
+        animators = AnimatorSet()
+        animators.playTogether( buttonAnimator, circleAnimator)
+        animators.duration = 1000
     }
 
     fun download(url: String, title: String){
         downloadRequest = DownloadManager.Request(Uri.parse(url))
         downloadTitle = title
         downloadId = downloadManager.enqueue(downloadRequest)
-        buttonAnimator.start()
+        animators.start()
     }
 
     private fun disableDownloadButtonDuringDownload(view: View, animator: Animator) {

@@ -3,5 +3,6 @@
     <declare-styleable name="SickCustomButton">
         <attr name="waitingText" format="string" />
         <attr name="actionText" format="string" />
+        <attr name="circleColor" format="color" />
     </declare-styleable>
 </resources>

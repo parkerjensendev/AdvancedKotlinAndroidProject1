@@ -1,10 +1,7 @@
 package com.example.android.advancedandroidkotlinpart1
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.withStyledAttributes
@@ -18,6 +15,9 @@ class SickCustomButton @JvmOverloads constructor(
 
     private var waitingText = ""
     private var actionText = ""
+    private var circleColor = Color.WHITE
+    private var rectangle: RectF? = null
+    var arcProportion: Float = 0f
     var isWaiting = true
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -34,6 +34,7 @@ class SickCustomButton @JvmOverloads constructor(
         context.withStyledAttributes(attrs, R.styleable.SickCustomButton) {
             waitingText = getString(R.styleable.SickCustomButton_waitingText).toString()
             actionText = getString(R.styleable.SickCustomButton_actionText).toString()
+            circleColor = getColor(R.styleable.SickCustomButton_circleColor, Color.WHITE)
         }
     }
 
@@ -47,14 +48,18 @@ class SickCustomButton @JvmOverloads constructor(
             canvas.drawText(waitingText, (width/2).toFloat(), (height/1.75).toFloat(), paint)
         } else {
             canvas.drawText(actionText, (width/2).toFloat(), (height/1.75).toFloat(), paint)
+
+            paint.color = circleColor
+            if (rectangle == null) {
+                rectangle = RectF((width * 3/4).toFloat(), (height / 4).toFloat(), (width * 3/4 + height / 2).toFloat(),  (height / 4 + height / 2).toFloat())
+            }
+            canvas.drawArc(rectangle!!, -90f, arcProportion * 360, false, paint)
         }
 
     }
 
     override fun performClick(): Boolean {
-        if (super.performClick()) return true
-
-        //contentDescription = resources.getString(fanSpeed.label)
+        if(super.performClick()) return true
 
         invalidate()
         return true
